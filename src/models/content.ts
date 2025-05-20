@@ -6,26 +6,20 @@ const ContentSchema: Schema = new Schema({
   url: { type: String, required: true, unique: true, trim: true },
   description: { type: String },
   textContent: { type: String, required: true },
+  rating: { type: Number, default: 0, min: 0, max: 5 },
   type: { 
     type: String, 
     required: true,
     enum: ['text', 'image', 'link', 'video']
   },
-  relatedProducts: [{ 
-    type: Schema.Types.ObjectId, 
-    ref: 'Product' 
-  }],
   businessId: { 
     type: Schema.Types.ObjectId, 
     ref: 'User', 
     required: true 
   },
-  tags: { type: [String]},
+  tags: [{ type: String}],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
-  seoTitle: { type: String, trim: true },
-  seoDescription: { type: String, trim: true },
-  featuredImage: { type: String },
   status: { 
     type: String, 
     enum: ['draft', 'published', 'archived'], 
