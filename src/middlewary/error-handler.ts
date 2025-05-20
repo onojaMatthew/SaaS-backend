@@ -3,12 +3,12 @@ import { AppError } from '../utils/errorHandler';
 
 const errorHandler: ErrorRequestHandler  = (
   err: AppError,
-  _req: Request,
+  req: Request,
   res: Response,
-  _next: NextFunction
-): void => {
+  next: NextFunction
+): any => {
   if (err.isOperational) {
-    res.status(err.statusCode || 500).json({
+    return res.status(err.statusCode || 500).json({
       success: false,
       message: err.message || 'Something went wrong',
       data: null,
