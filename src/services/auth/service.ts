@@ -4,6 +4,7 @@ import { redis } from '../../config/redis';
 import { User, UserRole } from "../../models/user";
 import { Business } from "../../models/business";
 import { key } from "../../config/key";
+import { Logger } from "../../utils/logger";
 
 export class AuthService {
   static async register(
@@ -50,7 +51,6 @@ export class AuthService {
   }
 
   static async login(email: string, password: string) {
-    console.log(email, password, " data in login class")
     const secret = key.SECRET;
     const expiresIn = key.EXPIRES_IN;
 
@@ -60,7 +60,6 @@ export class AuthService {
     const cachedUser = await redis.get(`user:email:${email}`);
     if (cachedUser) {
       const user = JSON.parse(cachedUser);
-      console.log(user, " the cached user")
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) throw new Error('Invalid credentials');
       const business = await Business.findById(user.businessId)
@@ -120,8 +119,8 @@ export class AuthService {
       );
 
       return { user, decoded };
-    } catch (error) {
-      console.log(error, " the error in verify token")
+    } catch (error: any) {
+      Logger.error(error.message);
       throw new Error('Invalid or expired token');
     }
   }

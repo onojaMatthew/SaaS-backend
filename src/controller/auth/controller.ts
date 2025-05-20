@@ -50,6 +50,7 @@ export const me = async (req: Request, res: Response, next: NextFunction): Promi
 
     res.json({ success: true, message: 'User retrieved successfully', data: user });
   } catch (error: any) {
+    Logger.error(error.message);
     return next(new AppError("Internal Server Error", 500));
   }
 }
