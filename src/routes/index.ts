@@ -5,11 +5,10 @@ import { RecommendationRoutes } from "./recommendation";
 import { AnalyticsRoutes } from "./analytics";
 import { ContentRoutes } from "./content";
 
-
 export const router = (app: Application) => {
   app.use("/api/v1", AuthRoutes);
   app.use("/api/v1", UserRoutes);
-  // app.use("/api/v1", RecommendationRoutes);
+  app.use("/api/v1", RecommendationRoutes);
   app.use("/api/v1", AnalyticsRoutes);
   app.use("/api/v1", ContentRoutes);
 }
