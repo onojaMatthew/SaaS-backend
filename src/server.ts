@@ -1,4 +1,3 @@
-import { ErrorRequestHandler, Request, Response, NextFunction, } from 'express';
 import app from './app';
 import { Logger } from './utils/logger';
 import connectDB from './config/db';
