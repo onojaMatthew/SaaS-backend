@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import { config } from 'dotenv';
 import { router } from './routes';
-import errorHandler from './middlewary/error-handler';
+import errorHandler from './middleware/error-handler';
 
 config();
 

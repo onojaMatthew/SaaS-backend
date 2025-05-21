@@ -3,7 +3,7 @@ import { IContent } from "../types/content.types";
 
 const ContentSchema: Schema = new Schema({
   title: { type: String, required: true, trim: true },
-  url: { type: String, required: true, unique: true, trim: true },
+  url: { type: String, required: true, trim: true },
   description: { type: String },
   textContent: { type: String, required: true },
   rating: { type: Number, default: 0, min: 0, max: 5 },

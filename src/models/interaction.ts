@@ -5,12 +5,12 @@ const InteractionSchema = new Schema<IInteraction>(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     contentId: { type: Schema.Types.ObjectId, ref: 'Content', required: true },
-    interactionType: { 
-      type: String, 
-      enum: ['view', 'like', 'share', 'save', 'click', 'comment'], 
-      required: true 
+    interactionType: {
+      type: String,
+      enum: ['view', 'like', 'share', 'save', 'click', 'comment'],
+      required: true
     },
-    value: { type: Number, min: 1, max: 5 }, // For ratin
+    value: { type: Number, min: 1, max: 5 }, // For rating
     duration: { type: Number }
   },
   { timestamps: true }

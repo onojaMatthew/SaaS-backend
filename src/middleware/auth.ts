@@ -19,7 +19,7 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
       businessId: string;
       role: string;
     };
-
+    
     // Get user from database
     const user = await User.findById(decoded.id).select('-password');
 

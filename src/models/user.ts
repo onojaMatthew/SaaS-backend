@@ -101,7 +101,7 @@ UserSchema.methods.generateAuthToken = function (): string {
   if (!expiresIn) throw new Error("JWT_EXPIRES_IN is not defined");
 
   const payload = {
-    id: this._id.toString(),
+    id: this.id.toString(),
     businessId: this.businessId.toString(),
     role: this.role
   };
