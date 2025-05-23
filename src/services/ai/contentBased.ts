@@ -82,16 +82,13 @@ export class ContentBasedFiltering {
         // Normalized text features
         Math.min(content.title.length / 100, 1),
         Math.min(content.description.length / 500, 1),
-        Math.min(content.tags.length / 10, 1),
+        Math.min(content?.category?.length / 20, 1),
+        Math.min(content?.ratings?.length! / 1000, 1),
         
         // One-hot encoded type
         ...['text', 'image', 'video', 'link'].map(t => 
           content.type === t ? 1 : 0
         ),
-        
-        // Metadata features
-        content.metadata?.popularity || 0,
-        content.metadata?.engagement || 0,
         
         // Padding
         ...new Array(this.featureSize - 7).fill(0)

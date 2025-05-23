@@ -2,7 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 import { RecommendationService } from '../../services/recommendation/service';
 import { ContentService } from '../../services/content/service';
 import { Logger } from '../../utils/logger';
+import { Interaction } from '../../models/interaction';
 import { AppError } from '../../utils/errorHandler';
+
+
 
 const recommendationService = new RecommendationService();
 const contentService = new ContentService();
@@ -64,3 +67,4 @@ export const logInteraction = async (req: Request, res: Response, next: NextFunc
     next(new AppError("Internal Server Error", 500));
   }
 };
+

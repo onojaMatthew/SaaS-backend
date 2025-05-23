@@ -86,13 +86,8 @@ export class CollaborativeFiltering {
       // Ensure we have at least 1 user and content
       if (this.numUsers === 0 || this.numContents === 0) {
         this.isTrained = false;
-        // throw new Error('No users or contents available for training');
+        throw new Error('No users or contents available for training');
       }
-
-      // if (this.numUsers === 0 || this.numContents === 0) {
-      //   this.isTrained = false;
-      //   throw new Error('No users or contents available for training');
-      // }
 
       // Rebuild model with correct dimensions
       this.model = this.buildModel();

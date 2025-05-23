@@ -3,15 +3,14 @@ import { IInteraction } from "../types/interaction.types";
 
 const InteractionSchema = new Schema<IInteraction>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'Reader', required: true },
     contentId: { type: Schema.Types.ObjectId, ref: 'Content', required: true },
     interactionType: {
       type: String,
-      enum: ['view', 'like', 'share', 'save', 'click', 'comment'],
+      enum: ['view', 'like', 'rating', 'share', 'save', 'click', 'comment'],
       required: true
     },
-    value: { type: Number, min: 1, max: 5 }, // For rating
-    duration: { type: Number }
+    rating: { type: Number, min: 1, max: 5 },
   },
   { timestamps: true }
 );

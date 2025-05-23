@@ -4,27 +4,23 @@ import { IContent } from "../types/content.types";
 const ContentSchema: Schema = new Schema({
   title: { type: String, required: true, trim: true },
   url: { type: String, required: true, trim: true },
-  description: { type: String },
+  description: { type: String, trim: true },
+  author: { type: String, trim: true },
   textContent: { type: String, required: true },
-  rating: { type: Number, default: 0, min: 0, max: 5 },
-  type: { 
-    type: String, 
-    required: true,
+  ratings: [{ type: Number }],
+  averageRating: { type: Number },
+  type: {
+    type: String,
     enum: ['text', 'image', 'link', 'video']
   },
-  businessId: { 
-    type: Schema.Types.ObjectId, 
-    ref: 'User', 
-    required: true 
+  businessId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
-  tags: [{ type: String}],
+  category: { type: String },
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-  status: { 
-    type: String, 
-    enum: ['draft', 'published', 'archived'], 
-    default: 'draft' 
-  }
+  updatedAt: { type: Date, default: Date.now }
 }, {
   toJSON: { virtuals: true },
   toObject: { virtuals: true }

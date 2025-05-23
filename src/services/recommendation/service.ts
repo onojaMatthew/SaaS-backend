@@ -1,3 +1,4 @@
+import * as tf from '@tensorflow/tfjs';
 import { Content } from '../../models/content';
 import { Interaction } from '../../models/interaction';
 import { redis } from '../../config/redis';
@@ -81,17 +82,12 @@ export class RecommendationService {
     limit: number
   ): Promise<IContent[]> {
     try {
-      // Try to get CF recommendations if model is available
-      const cfRecs = this.cfModel.isTrained 
-        ? await this.cfModel.recommendForUser(userId, limit * 2)
-        : [];
-      
       // Always get CB recommendations
       const cbRecs = await this.cbModel.recommendForUser(userId, limit * 2);
       
       // Combine results (adjust weights based on which models are available)
       const combinedIds = this.combineRecommendations(
-        cfRecs, 
+        // cfRecs, 
         cbRecs, 
         limit,
         this.cfModel.isTrained ? 0.7 : 0, // Only use CF weight if model is trained
@@ -111,22 +107,13 @@ export class RecommendationService {
   
 
   private combineRecommendations(
-    cfRecs: string[],
+    // cfRecs: string[],
     cbRecs: string[],
     limit: number,
     cfWeight: number = 0.7,
     cbWeight: number = 0.3
   ): string[] {
     const combined = new Map<string, number>();
-
-    // Collaborative filtering results
-    if (cfWeight > 0) {
-      cfRecs.forEach((id, index) => {
-        const score = (cfRecs.length - index) * cfWeight;
-        combined.set(id, (combined.get(id) || 0) + score);
-      });
-    }
-
     // Content-based results
     cbRecs.forEach((id, index) => {
       const score = (cbRecs.length - index) * cbWeight;
@@ -240,3 +227,6 @@ export class RecommendationService {
     }
   }
 }
+
+
+

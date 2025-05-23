@@ -3,10 +3,12 @@ import { AuthService } from '../../services/auth/service';
 import { User } from '../../models/user';
 import { AppError } from '../../utils/errorHandler';
 import { Logger } from '../../utils/logger';
+import { Reader } from '../../models/reader';
 
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { name, email, password, businessName, role } = req.body;
+   
     const itExists = await User.findOne({ email });
     if (itExists) { 
       return next(new AppError("Email already taken", 400));
@@ -21,6 +23,23 @@ export const register = async (req: Request, res: Response, next: NextFunction):
     );
 
     res.status(201).json({ success: true, data: { user, business, token }, message: 'Registration successful' });
+  } catch (error: any) {
+    Logger.error(error.message)
+    next(new AppError("Failed to register", 500));
+  }
+}
+
+export const registerReader = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { email, password, role } = req.body;
+
+    const { user, token } = await AuthService.registerReader(
+      email,
+      password,
+      role
+    );
+    console.log("after auth class operation")
+    res.status(201).json({ success: true, data: { user, token }, message: 'Registration successful' });
   } catch (error: any) {
     Logger.error(error.message)
     next(new AppError("Failed to register", 500));

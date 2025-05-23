@@ -14,7 +14,16 @@ export class ContentController {
   // Create content with cache invalidation
   public static async createContent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const content = await Content.create(req.body);
+      const { title, author, description, genre, url, businessId, textContent } = req.body;
+      const content = await Content.create({
+        title,
+        author,
+        description,
+        category: genre,
+        url,
+        textContent,
+        businessId
+      });
       
       // Invalidate cached content lists
       await Promise.all([
@@ -219,9 +228,59 @@ export class ContentController {
         message: 'Stats calculated',
         data: stats,
       });
+
+      
     } catch (error) {
       Logger.error('Error getting content stats:', error);
       return next(new AppError("Failed to get content stats", 500));
+    }
+  }
+
+  public static async rateContent(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const contentId  = req.params.id;
+    const { id } = req.user;
+    const { rating } = req.body
+
+    if (!rating || typeof rating !== 'number' || rating < 1 || rating > 5) {
+      return next(new AppError("Invalid rating value", 400));
+    }
+
+    try {
+      const cacheKey = `content:stats:${contentId}`;
+
+      let content = await Content.findByIdAndUpdate({ _id: contentId }, {$push: { ratings: rating }}, { new: true });
+      // Option 1: Store user ratings individually (for average calculation)
+      
+      if (!content) return next(new AppError("Content not found", 404));
+      // Recalculate averageRating and save it
+      // Invalidate relevant caches
+      await Promise.all([
+        redis.del(`content:${id}`),
+        redis.del('contents:all'),
+        redis.del(`contents:business:${(content as IContent).businessId}`)
+      ]);
+
+      const allRatings = content.ratings ?? [];
+
+      const averageRating = allRatings.reduce((sum: number, r: number) => sum + r, 0) / allRatings.length;
+
+      content.averageRating = parseFloat(averageRating.toFixed(1))
+      await content.save()
+
+      let interaction = new Interaction({
+        userId: id,
+        contentId,
+        interactionType: "rating",
+        rating
+      });
+
+      // Cache stats with shorter TTL (5 minutes)
+      await redis.set(cacheKey, JSON.stringify(content), { EX: 300 });
+      await interaction.save();
+      res.status(200).json({ message: 'Rating submitted' })
+    } catch (error: any) {
+      Logger.error(error.message)
+      next(new AppError("Internal Server Error", 500));
     }
   }
 }

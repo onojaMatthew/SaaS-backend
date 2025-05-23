@@ -5,6 +5,7 @@ import { User, UserRole } from "../../models/user";
 import { Business } from "../../models/business";
 import { key } from "../../config/key";
 import { Logger } from "../../utils/logger";
+import { Reader } from "../../models/reader";
 
 export class AuthService {
   static async register(
@@ -48,6 +49,33 @@ export class AuthService {
     const token = user.generateAuthToken();
 
     return { user, token, business };
+  }
+
+  static async registerReader(
+    email: string,
+    password: string,
+    role: UserRole = UserRole.USER
+  ) {
+    console.log("in the register class")
+    // Check if user exists
+    if (await Reader.findOne({ email })) {
+      throw new Error('Email already in use');
+    }
+
+    console.log("after the email check")
+    // Create reader account
+    const reader = await Reader.create({
+      email,
+      password,
+      role,
+    });
+
+    console.log("have created user")
+   
+    // Generate token
+    const token = reader.generateAuthToken();
+    console.log(token, ' the token')
+    return { user: reader, token };
   }
 
   static async login(email: string, password: string) {

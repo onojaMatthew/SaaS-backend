@@ -3,43 +3,11 @@ import { model, Schema } from "mongoose";
 const RecommendationSchema: Schema = new Schema({
   user: { 
     type: Schema.Types.ObjectId, 
-    ref: 'User', 
+    ref: 'Reader', 
     required: true 
   },
-  products: [{
-    product: { 
-      type: Schema.Types.ObjectId, 
-      ref: 'Product', 
-      required: true 
-    },
-    score: { 
-      type: Number, 
-      required: true,
-      min: 0,
-      max: 100 
-    },
-    reasons: [{ 
-      type: String 
-    }]
-  }],
-  preferencesSnapshot: {
-    budget: {
-      min: { type: Number, required: true },
-      max: { type: Number, required: true }
-    },
-    categories: [{ type: String }],
-    mustHaveFeatures: [{ type: String }],
-    deployment: { 
-      type: String, 
-      enum: ['cloud', 'self-hosted', 'hybrid'],
-      required: true 
-    },
-    teamSize: { 
-      type: String, 
-      enum: ['individual', 'small-team', 'enterprise'],
-      required: true 
-    }
-  },
+  contents: [{ type: Schema.Types.ObjectId, ref: "Content" }],
+  preferencesSnapshot: {},
   algorithmVersion: { 
     type: String, 
     required: true 
