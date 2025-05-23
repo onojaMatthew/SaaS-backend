@@ -240,13 +240,13 @@ export class ContentController {
     const contentId  = req.params.id;
     const { id } = req.user;
     const { rating } = req.body
-
+    console.log(rating, id, contentId)
     if (!rating || typeof rating !== 'number' || rating < 1 || rating > 5) {
       return next(new AppError("Invalid rating value", 400));
     }
 
     try {
-      const cacheKey = `content:stats:${contentId}`;
+      const cacheKey = `content:rate:${contentId}`;
 
       let content = await Content.findByIdAndUpdate({ _id: contentId }, {$push: { ratings: rating }}, { new: true });
       // Option 1: Store user ratings individually (for average calculation)
@@ -264,8 +264,8 @@ export class ContentController {
 
       const averageRating = allRatings.reduce((sum: number, r: number) => sum + r, 0) / allRatings.length;
 
-      content.averageRating = parseFloat(averageRating.toFixed(1))
-      await content.save()
+      content.averageRating = parseFloat(averageRating.toFixed(1));
+      await content.save();
 
       let interaction = new Interaction({
         userId: id,
@@ -279,6 +279,7 @@ export class ContentController {
       await interaction.save();
       res.status(200).json({ message: 'Rating submitted' })
     } catch (error: any) {
+      console.log(error)
       Logger.error(error.message)
       next(new AppError("Internal Server Error", 500));
     }

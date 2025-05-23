@@ -1,20 +1,20 @@
-import * as tf from '@tensorflow/tfjs';
+// import * as tf from '@tensorflow/tfjs';
 import { Content } from '../../models/content';
 import { Interaction } from '../../models/interaction';
 import { redis } from '../../config/redis';
 import { Logger } from '../../utils/logger';
 import { IContent } from '../../types/content.types';
 import { ContentBasedFiltering } from '../ai/contentBased';
-import { CollaborativeFiltering } from '../ai/collaborativeFiltering';
+// import { CollaborativeFiltering } from '../ai/collaborativeFiltering';
 
 export class RecommendationService {
   private cbModel: ContentBasedFiltering;
-  private cfModel: CollaborativeFiltering;
+  // private cfModel: CollaborativeFiltering;
   private static RECOMMENDATION_CACHE_TTL = 1800; // 30 minutes
 
   constructor() {
     this.cbModel = new ContentBasedFiltering();
-    this.cfModel = new CollaborativeFiltering();
+    // this.cfModel = new CollaborativeFiltering();
     this.initialize();
   }
 
@@ -27,7 +27,6 @@ export class RecommendationService {
       try {
         const interactionCount = await Interaction.countDocuments();
         if (interactionCount > 0) {
-          await this.cfModel.train();
           Logger.info('Collaborative filtering model initialized');
         } else {
           Logger.warn('No interactions available - skipping collaborative filtering initialization');
@@ -90,7 +89,7 @@ export class RecommendationService {
         // cfRecs, 
         cbRecs, 
         limit,
-        this.cfModel.isTrained ? 0.7 : 0, // Only use CF weight if model is trained
+        // this.cfModel.isTrained ? 0.7 : 0, // Only use CF weight if model is trained
         0.3
       );
       
@@ -174,19 +173,19 @@ export class RecommendationService {
       await redis.del(`recommendations:user:${userId}:*`);
 
       // Update models in background
-      setImmediate(async () => {
-        try {
-          if (!this.cfModel.isDisposed) {
-            await Promise.all([
-              this.cfModel.updateUserPreferences(userId, contentId),
-              this.cbModel.updateContentVectors(contentId)
-            ]);
-            Logger.debug(`Updated models for user ${userId} and content ${contentId}`);
-          }
-        } catch (error) {
-          Logger.error('Background model update error:', error);
-        }
-      });
+      // setImmediate(async () => {
+      //   try {
+      //     if (!this.cfModel.isDisposed) {
+      //       await Promise.all([
+      //         this.cfModel.updateUserPreferences(userId, contentId),
+      //         this.cbModel.updateContentVectors(contentId)
+      //       ]);
+      //       Logger.debug(`Updated models for user ${userId} and content ${contentId}`);
+      //     }
+      //   } catch (error) {
+      //     Logger.error('Background model update error:', error);
+      //   }
+      // });
     } catch (error: any) {
       Logger.error('Error logging interaction:', error);
       throw new Error(error.message);
@@ -200,17 +199,14 @@ export class RecommendationService {
       // Dispose old models first
       try {
         this.cbModel.dispose();
-        this.cfModel.dispose();
       } catch (disposeError) {
         Logger.warn('Error disposing old models:', disposeError);
       }
       
       // Create new instances
       this.cbModel = new ContentBasedFiltering();
-      this.cfModel = new CollaborativeFiltering();
 
       await Promise.all([
-        this.cfModel.train(),
         this.cbModel.train()
       ]);
       // Clear all recommendation caches

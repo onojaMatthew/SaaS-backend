@@ -2,20 +2,15 @@ import { NextFunction, Request, Response } from 'express';
 import { RecommendationService } from '../../services/recommendation/service';
 import { ContentService } from '../../services/content/service';
 import { Logger } from '../../utils/logger';
-import { Interaction } from '../../models/interaction';
 import { AppError } from '../../utils/errorHandler';
-
-
 
 const recommendationService = new RecommendationService();
 const contentService = new ContentService();
 
 export const getRecommendations = async (req: Request, res: Response) => {
   try {
-    const userId = req.user._id; // From JWT
+    const userId = req.user.id; // From JWT
     const { limit = 10 } = req.query;
-
-    // validateRequest(req);
 
     const recommendations = await recommendationService.getRecommendationsForUser(
       userId,

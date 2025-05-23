@@ -35,6 +35,7 @@ const ReaderSchema = new Schema<IReader>(
       transform: function (doc, ret) {
         ret.id = ret._id;
         delete ret._id;
+        delete ret.password;
         return ret;
       }
     }

@@ -56,13 +56,11 @@ export class AuthService {
     password: string,
     role: UserRole = UserRole.USER
   ) {
-    console.log("in the register class")
     // Check if user exists
     if (await Reader.findOne({ email })) {
       throw new Error('Email already in use');
     }
 
-    console.log("after the email check")
     // Create reader account
     const reader = await Reader.create({
       email,
@@ -74,7 +72,6 @@ export class AuthService {
    
     // Generate token
     const token = reader.generateAuthToken();
-    console.log(token, ' the token')
     return { user: reader, token };
   }
 
@@ -84,22 +81,7 @@ export class AuthService {
 
     if (!secret) throw new Error("JWT_SECRET is not defined");
     if (!expiresIn) throw new Error("JWT_EXPIRES_IN is not defined");
-    // Check cache first
-    const cachedUser = await redis.get(`user:email:${email}`);
-    if (cachedUser) {
-      const user = JSON.parse(cachedUser);
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) throw new Error('Invalid credentials');
-      const business = await Business.findById(user.businessId)
-      const token = jwt.sign(
-        { id: user._id, businessId: user.businessId, role: user.role },
-        key.SECRET,
-        { expiresIn: key.EXPIRES_IN} as jwt.SignOptions
-      );
-      
-      return { user, business, token };
-    }
-
+    
     // Not in cache, check database
     const user = await User.findOne({ email }).select('+password');
     if (!user || !(await user.comparePassword(password))) {
@@ -113,6 +95,34 @@ export class AuthService {
     // Cache user data
     await redis.set(
       `user:email:${email}`,
+      JSON.stringify(user.toJSON()),
+      { EX: 3600 }
+    );
+
+    const token = user.generateAuthToken();
+    return { user, token };
+  }
+
+  static async signin(email: string, password: string) {
+    const secret = key.SECRET;
+    const expiresIn = key.EXPIRES_IN;
+
+    if (!secret) throw new Error("JWT_SECRET is not defined");
+    if (!expiresIn) throw new Error("JWT_EXPIRES_IN is not defined");
+   
+    // Not in cache, check database
+    const user = await Reader.findOne({ email }).select('+password');
+    if (!user || !(await user.comparePassword(password))) {
+      throw new Error('Invalid credentials');
+    }
+
+    // Update last login
+    user.lastLogin = new Date();
+    await user.save();
+
+    // Cache user data
+    await redis.set(
+      `reader:email:${email}`,
       JSON.stringify(user.toJSON()),
       { EX: 3600 }
     );

@@ -64,6 +64,7 @@ const UserSchema = new Schema<IUser>(
       versionKey: false,
       transform: function (doc, ret) {
         ret.id = ret._id;
+        delete ret.password;
         delete ret._id;
         return ret;
       }
@@ -99,9 +100,8 @@ UserSchema.methods.generateAuthToken = function (): string {
 
   if (!secret) throw new Error("JWT_SECRET is not defined");
   if (!expiresIn) throw new Error("JWT_EXPIRES_IN is not defined");
-
   const payload = {
-    id: this.id.toString(),
+    id: this._id.toString(),
     businessId: this.businessId.toString(),
     role: this.role
   };

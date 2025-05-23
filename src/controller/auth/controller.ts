@@ -49,7 +49,7 @@ export const registerReader = async (req: Request, res: Response, next: NextFunc
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { email, password } = req.body;
-    const { user, token, business } = await AuthService.login(email, password);
+    const { user, token, business }: any = await AuthService.login(email, password);
     res.json({ success: true, data: {user, token, business}, message: 'Login successful' });
   } catch (error: any) {
     Logger.error(error.message)
@@ -57,6 +57,20 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     
   }
 }
+
+
+export const signin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { email, password } = req.body;
+    const { user, token } = await AuthService.signin(email, password);
+    res.json({ success: true, data: { user, token }, message: 'Login successful' });
+  } catch (error: any) {
+    Logger.error(error.message)
+    return next(new AppError("Failed to log in", 500));
+    
+  }
+}
+
 
 export const me = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

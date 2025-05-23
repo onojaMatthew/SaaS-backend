@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/user';
 import { Logger } from '../utils/logger';
 import { AppError } from '../utils/errorHandler';
+import { Reader } from '../models/reader';
 
 export const authenticateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -21,12 +22,9 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
     };
     
     // Get user from database
-    const user = await User.findById(decoded.id).select('-password');
-
-    if (!user) {
-      return next(new AppError("User not found", 401));
-    }
-
+    let user;
+    user = await User.findById(decoded.id).select('-password');
+    if (!user) user = await Reader.findById(decoded.id).select('-password');
     // Attach user and business to request
     req.user = user;
     req.businessId = decoded.businessId;
