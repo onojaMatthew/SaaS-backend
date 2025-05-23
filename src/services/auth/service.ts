@@ -34,6 +34,7 @@ export class AuthService {
       role,
       businessName,
       businessId: business._id,
+      slug: business.slug,
       subscription: {
         plan: 'free',
         startsAt: new Date(),

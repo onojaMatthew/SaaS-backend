@@ -12,10 +12,13 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "vercel-build": "echo hello"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",
+    "@types/swagger-ui-express": "^4.1.8",
+    "@types/yamljs": "^0.2.34",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
@@ -28,9 +31,11 @@
     "mongoose": "^8.14.2",
     "morgan": "^1.10.0",
     "redis": "^5.0.1",
+    "swagger-ui-express": "^5.0.1",
     "typescript": "^5.8.3",
     "winston": "^3.17.0",
-    "winston-mongodb": "^6.0.0"
+    "winston-mongodb": "^6.0.0",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

@@ -52,6 +52,7 @@ const UserSchema = new Schema<IUser>(
       min: { type: Number },
       max: { type: Number }
     },
+    slug: { type: String },
     categories: [{ type: String }],
     mustHaveFeatures: [{ type: String }],
     deployment: { type: String, enum: [ 'cloud', 'self-hosted', 'hybrid']},

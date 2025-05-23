@@ -19,6 +19,7 @@ export interface IUser extends Document {
     min?: number;
     max?: number;
   };
+  slug: string;
   categories?: string[];
   mustHaveFeatures?: string[];
   deployment?: 'cloud' | 'self-hosted' | 'hybrid';
