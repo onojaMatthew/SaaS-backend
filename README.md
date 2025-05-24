@@ -229,11 +229,6 @@ Rebuilds and retrains the model if previously disposed
 
 ---
 
-## 🧪 Running Tests
-
-
-`npm run test`
-
 🚀 Getting Started
 `1. Clone the repo https://github.com/onojaMatthew/SaaS-backend.git`
 
@@ -260,3 +255,8 @@ JWT_EXPIRES_IN=30d
 4. Start the server
 
 `npm run dev`
+
+## 🧪 Running Tests
+
+
+`npm run test`
