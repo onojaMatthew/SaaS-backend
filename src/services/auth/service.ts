@@ -42,14 +42,12 @@ export class AuthService {
       }
     });
 
-    console.log(user)
     // Update business owner
     business.owner = user._id;
     await business.save();
 
     // Generate token
     const token = user.generateAuthToken();
-    console.log(user, token, business)
     return { user, token, business };
   }
 
@@ -69,8 +67,6 @@ export class AuthService {
       password,
       role,
     });
-
-    console.log("have created user")
    
     // Generate token
     const token = reader.generateAuthToken();
@@ -102,7 +98,6 @@ export class AuthService {
     );
 
     const token = user.generateAuthToken();
-    console.log(token, "the token")
     return { user, token };
   }
 
