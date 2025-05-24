@@ -260,3 +260,13 @@ JWT_EXPIRES_IN=30d
 
 
 `npm run test`
+
+To build the docker container follow the commands below:
+
+From the root directory run:
+
+`docker build -t username/image-name .`
+
+To start the docker container run:
+
+`docker run --env-file .env username/image-name` make sure you add .env at the root directory
