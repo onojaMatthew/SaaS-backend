@@ -8,6 +8,26 @@ on:
     branches: [ "master" ]
 
 jobs:
+  test:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Load .env from secret
+        run: |
+          echo "${{ secrets.PROD_ENV_FILE }}" > .env
+          cat .env >> $GITHUB_ENV
+
+      - run: npm ci
+
+      - name: Run tests
+        run: npm run test
   build:
 
     runs-on: self-hosted
@@ -15,7 +35,6 @@ jobs:
     strategy:
       matrix:
         node-version: [22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v4
@@ -26,7 +45,8 @@ jobs:
         cache: 'npm'
     - run: npm install
     - run: npm run build --if-present
-    # - run: npm test
+    - run: cp /api.yaml /dist/api.yaml
+    - run: npm test
     - run: |
         touch .env
         echo "${{secrets.PROD_ENV_FILE}}" > .env
