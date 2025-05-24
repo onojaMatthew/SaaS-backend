@@ -54,9 +54,6 @@ const UserSchema = new Schema<IUser>(
     },
     slug: { type: String },
     categories: [{ type: String }],
-    mustHaveFeatures: [{ type: String }],
-    deployment: { type: String, enum: [ 'cloud', 'self-hosted', 'hybrid']},
-    teamSize: { type: String, enum: [ 'individual', 'small-team', 'enterprise']}
   },
   {
     timestamps: true,
@@ -91,9 +88,7 @@ UserSchema.methods.comparePassword = async function (
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// import jwt from 'jsonwebtoken';
 
-// In your User model methods:
 UserSchema.methods.generateAuthToken = function (): string {
   const secret = process.env.JWT_SECRET;
   const expiresIn = process.env.JWT_EXPIRES_IN;

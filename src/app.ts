@@ -14,7 +14,7 @@ config();
 
 const app = express();
 
-const swaggerJSDoc = YAML.load(path.resolve(__dirname, "../api.yaml"));
+const swaggerJSDoc = YAML.load("./api.yaml"); //path.resolve(__dirname, ".)
 
 // Middleware
 app.use(morgan('dev'));
