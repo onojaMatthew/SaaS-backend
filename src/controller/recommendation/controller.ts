@@ -3,15 +3,15 @@ import { RecommendationService } from '../../services/recommendation/service';
 import { ContentService } from '../../services/content/service';
 import { Logger } from '../../utils/logger';
 import { AppError } from '../../utils/errorHandler';
+import { Interaction } from '../../models/interaction';
 
 const recommendationService = new RecommendationService();
 const contentService = new ContentService();
 
 export const getRecommendations = async (req: Request, res: Response) => {
   try {
-    const userId = req.user._id; // From JWT
-    const { limit = 10 } = req.query;
-
+    const { limit = 10, userId } = req.query;
+    if (typeof userId !== "string") return;
     const recommendations = await recommendationService.getRecommendationsForUser(
       userId,
       Number(limit)
@@ -44,11 +44,9 @@ export const logInteraction = async (req: Request, res: Response, next: NextFunc
     const userId = req.user._id;
     const { contentId, interactionType } = req.body;
 
-    await recommendationService.logInteraction(
-      userId,
-      contentId,
-      interactionType
-    );
+     let interaction = new Interaction({ userId, contentId, interactionType });
+
+    await interaction.save();
 
     res.json({
       success: true,

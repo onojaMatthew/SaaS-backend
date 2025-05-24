@@ -50,8 +50,10 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   try {
     const { email, password } = req.body;
     const { user, token, business }: any = await AuthService.login(email, password);
+    
     res.json({ success: true, data: {user, token, business}, message: 'Login successful' });
   } catch (error: any) {
+    console.log(error)
     Logger.error(error.message)
     return next(new AppError("Failed to log in", 500));
     

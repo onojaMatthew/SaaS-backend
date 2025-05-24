@@ -42,13 +42,14 @@ export class AuthService {
       }
     });
 
+    console.log(user)
     // Update business owner
     business.owner = user._id;
     await business.save();
 
     // Generate token
     const token = user.generateAuthToken();
-
+    console.log(user, token, business)
     return { user, token, business };
   }
 
@@ -84,7 +85,7 @@ export class AuthService {
     if (!expiresIn) throw new Error("JWT_EXPIRES_IN is not defined");
     
     // Not in cache, check database
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email }).select('-password');
     if (!user || !(await user.comparePassword(password))) {
       throw new Error('Invalid credentials');
     }
@@ -101,6 +102,7 @@ export class AuthService {
     );
 
     const token = user.generateAuthToken();
+    console.log(token, "the token")
     return { user, token };
   }
 

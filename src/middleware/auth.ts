@@ -9,7 +9,6 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
   try {
     // Get token from header
     const token = req.headers.authorization?.split(' ')[1];
-    
     if (!token) {
       return next(new AppError("Access denied, no token provided", 401));
     }
@@ -20,11 +19,12 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
       businessId: string;
       role: string;
     };
-    
     // Get user from database
     let user;
+
     user = await User.findById(decoded.id).select('-password');
     if (!user) user = await Reader.findById(decoded.id).select('-password');
+    
     // Attach user and business to request
     req.user = user;
     req.businessId = decoded.businessId;

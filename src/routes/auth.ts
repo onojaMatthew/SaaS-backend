@@ -3,10 +3,10 @@ import { login, me, register, registerReader, signin } from '../controller/auth/
 
 const router = Router();
 
-router.post('/auth/register', register);
-router.post('/auth/login', login);
+router.post('/auth/business/register', register);
+router.post('/auth/business/login', login);
 router.get('/auth/me', me);
-router.post("/auth/signup", registerReader);
-router.post("/auth/reader/login", signin);
+router.post("/auth/user/register", registerReader);
+router.post("/auth/user/login", signin);
 
 export { router as AuthRoutes };

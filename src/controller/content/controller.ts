@@ -14,6 +14,8 @@ export class ContentController {
   // Create content with cache invalidation
   public static async createContent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      const role = req.user.role;
+      if (!role || role !== "content_manager") return next(new AppError("You do not have permission to perform this action", 401))
       const { title, author, description, genre, url, businessId, textContent } = req.body;
       const content = await Content.create({
         title,
@@ -132,6 +134,8 @@ export class ContentController {
   // Update content
   public static async updateContent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      const role = req.user.role;
+      if (!role || role !== "content_manager") return next(new AppError("You do not have permission to perform this action", 401))
       const { id } = req.params;
       const content = await Content.findByIdAndUpdate(id, req.body, { 
         new: true,
@@ -167,6 +171,8 @@ export class ContentController {
   // Delete content with cache invalidation
   public static async deleteContent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      const role = req.user.role;
+      if (!role || role !== "content_manager") return next(new AppError("You do not have permission to perform this action", 401))
       const { id } = req.params;
       const content = await Content.findByIdAndDelete(id).lean();
 
@@ -228,8 +234,6 @@ export class ContentController {
         message: 'Stats calculated',
         data: stats,
       });
-
-      
     } catch (error) {
       Logger.error('Error getting content stats:', error);
       return next(new AppError("Failed to get content stats", 500));
@@ -240,7 +244,6 @@ export class ContentController {
     const contentId  = req.params.id;
     const { id } = req.user;
     const { rating } = req.body
-    console.log(rating, id, contentId)
     if (!rating || typeof rating !== 'number' || rating < 1 || rating > 5) {
       return next(new AppError("Invalid rating value", 400));
     }

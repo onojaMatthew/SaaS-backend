@@ -65,7 +65,6 @@ const UserSchema = new Schema<IUser>(
       versionKey: false,
       transform: function (doc, ret) {
         ret.id = ret._id;
-        delete ret.password;
         delete ret._id;
         return ret;
       }
@@ -107,6 +106,7 @@ UserSchema.methods.generateAuthToken = function (): string {
     role: this.role
   };
 
+  console.log(payload)
   return jwt.sign(
     payload,
     secret,
