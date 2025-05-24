@@ -73,16 +73,16 @@ Authentication is handled via **JWT tokens** for both business and user accounts
 
 ### Auth Endpoints
 
-#### `POST /api/v1/auth/register`
+#### `POST /api/v1/auth/business/register`
 Register a new business account and return JWT and some busine.
 
-#### `POST /api/v1/auth/login`
+#### `POST /api/v1/auth/business/login`
 Login business and return JWT.
 
-#### `POST /api/v1/auth/signup`
+#### `POST /api/v1/auth/user/signup`
 Register a new user account and returns JWT.
 
-#### `POST /api/auth/reader/login`
+#### `POST /api/auth/user/login`
 Login user and return JWT.
 
 ---
@@ -90,13 +90,25 @@ Login user and return JWT.
 ### Content Endpoints
 
 #### `POST /api/v1/contents`
-Create new content (Business only, Auth required).
+Create new content (Business only, Auth required). this api assumes that you have the content image link so there is provision for uploading files
+
+#### `GET /api/v1/contents`
+Fetch all contents
 
 #### `PUT /api/v1/contents/:id/update`
 Edit content (Business only, Auth required).
 
+### `POST /api/v1/contents/:id/rate`
+Rate content
+
+### `DELETE /api/v1/contents/:id/delete`
+Delete content (Business only. auth required)
+
 #### `GET /api/v1/recommendations`
 Get recommended contents for a logged-in user.
+
+#### `GET /api/v1/recommendations/interaction`
+Logs user interaction (e.g, view, click rating).
 
 ---
 
