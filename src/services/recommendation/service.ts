@@ -1,20 +1,17 @@
-// import * as tf from '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs';
 import { Content } from '../../models/content';
 import { Interaction } from '../../models/interaction';
 import { redis } from '../../config/redis';
 import { Logger } from '../../utils/logger';
 import { IContent } from '../../types/content.types';
 import { ContentBasedFiltering } from '../ai/contentBased';
-// import { CollaborativeFiltering } from '../ai/collaborativeFiltering';
 
 export class RecommendationService {
   private cbModel: ContentBasedFiltering;
-  // private cfModel: CollaborativeFiltering;
   private static RECOMMENDATION_CACHE_TTL = 1800; // 30 minutes
 
   constructor() {
     this.cbModel = new ContentBasedFiltering();
-    // this.cfModel = new CollaborativeFiltering();
     this.initialize();
   }
 
@@ -22,20 +19,6 @@ export class RecommendationService {
     try {
       // Initialize content-based model first (doesn't need interactions)
       await this.cbModel.train();
-      
-      // Try to initialize collaborative filtering if interactions exist
-      try {
-        const interactionCount = await Interaction.countDocuments();
-        if (interactionCount > 0) {
-          Logger.info('Collaborative filtering model initialized');
-        } else {
-          Logger.warn('No interactions available - skipping collaborative filtering initialization');
-        }
-      } catch (cfError) {
-        Logger.error('Error initializing collaborative filtering model:', cfError);
-        // Continue with just content-based recommendations
-      }
-      
       Logger.info('Recommendation models initialized');
     } catch (error) {
       Logger.error('Error initializing recommendation models:', error);
@@ -86,10 +69,8 @@ export class RecommendationService {
       
       // Combine results (adjust weights based on which models are available)
       const combinedIds = this.combineRecommendations(
-        // cfRecs, 
         cbRecs, 
         limit,
-        // this.cfModel.isTrained ? 0.7 : 0, // Only use CF weight if model is trained
         0.3
       );
       
@@ -154,8 +135,6 @@ export class RecommendationService {
     userId: string,
     contentId: string,
     interactionType: string,
-    duration: number,
-    value: number | any,
     metadata: Record<string, any> = {}
   ): Promise<void> {
     try {
@@ -164,28 +143,21 @@ export class RecommendationService {
         userId,
         contentId,
         interactionType,
-        duration,
         metadata,
-        value: value && value
       });
 
       // Invalidate recommendation cache
       await redis.del(`recommendations:user:${userId}:*`);
 
       // Update models in background
-      // setImmediate(async () => {
-      //   try {
-      //     if (!this.cfModel.isDisposed) {
-      //       await Promise.all([
-      //         this.cfModel.updateUserPreferences(userId, contentId),
-      //         this.cbModel.updateContentVectors(contentId)
-      //       ]);
-      //       Logger.debug(`Updated models for user ${userId} and content ${contentId}`);
-      //     }
-      //   } catch (error) {
-      //     Logger.error('Background model update error:', error);
-      //   }
-      // });
+      setImmediate(async () => {
+        try {
+          this.cbModel.updateContentVectors(contentId)
+          Logger.debug(`Updated models for user ${userId} and content ${contentId}`);
+        } catch (error) {
+          Logger.error('Background model update error:', error);
+        }
+      });
     } catch (error: any) {
       Logger.error('Error logging interaction:', error);
       throw new Error(error.message);
@@ -206,9 +178,7 @@ export class RecommendationService {
       // Create new instances
       this.cbModel = new ContentBasedFiltering();
 
-      await Promise.all([
-        this.cbModel.train()
-      ]);
+      await this.cbModel.train()
       // Clear all recommendation caches
       const keys = await redis.keys('recommendations:user:*');
       if (keys.length > 0) {

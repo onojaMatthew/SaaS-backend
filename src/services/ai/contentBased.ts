@@ -55,12 +55,10 @@ export class ContentBasedFiltering {
   public async train(): Promise<void> {
     try {
       const contents = await Content.find().lean();
-      
-      if (contents.length === 0) {
-        Logger.warn('No contents found for training. Skipping training step.');
-        return;
-      }
-
+      if (!contents || contents.length === 0) {
+      Logger.warn("No content found for training the content-based model.");
+      return;
+    }
       const features = this.generateFeatureVectors(contents);
       
       await this.model.fit(features, features, {

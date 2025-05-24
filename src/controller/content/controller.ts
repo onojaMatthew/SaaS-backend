@@ -279,7 +279,6 @@ export class ContentController {
       await interaction.save();
       res.status(200).json({ message: 'Rating submitted' })
     } catch (error: any) {
-      console.log(error)
       Logger.error(error.message)
       next(new AppError("Internal Server Error", 500));
     }

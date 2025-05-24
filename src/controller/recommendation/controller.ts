@@ -9,7 +9,7 @@ const contentService = new ContentService();
 
 export const getRecommendations = async (req: Request, res: Response) => {
   try {
-    const userId = req.user.id; // From JWT
+    const userId = req.user._id; // From JWT
     const { limit = 10 } = req.query;
 
     const recommendations = await recommendationService.getRecommendationsForUser(
@@ -42,14 +42,12 @@ export const getRecommendations = async (req: Request, res: Response) => {
 export const logInteraction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const userId = req.user._id;
-    const { contentId, interactionType, duration, value } = req.body;
+    const { contentId, interactionType } = req.body;
 
     await recommendationService.logInteraction(
       userId,
       contentId,
-      interactionType,
-      duration, 
-      value
+      interactionType
     );
 
     res.json({
