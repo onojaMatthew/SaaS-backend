@@ -8,7 +8,6 @@ import { Reader } from '../../models/reader';
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { name, email, password, businessName, role } = req.body;
-   
     const itExists = await User.findOne({ email });
     if (itExists) { 
       return next(new AppError("Email already taken", 400));
@@ -24,6 +23,7 @@ export const register = async (req: Request, res: Response, next: NextFunction):
 
     res.status(201).json({ success: true, data: { user, business, token }, message: 'Registration successful' });
   } catch (error: any) {
+    console.log(error)
     Logger.error(error.message)
     return next(new AppError(error.message, 500));
   }
