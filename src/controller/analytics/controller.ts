@@ -6,7 +6,6 @@ import { AppError } from '../../utils/errorHandler';
 export const getAnalytics = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { businessId } = req.user;
-    console.log(businessId.toString(), " the business id")
     const { timeRange = '7d' } = req.query;
 
     // Calculate date range
@@ -58,12 +57,12 @@ export const getAnalytics = async (req: Request, res: Response, next: NextFuncti
           },
           likes: {
             $sum: {
-              $cond: [{ $eq: ['$interactionType', 'like'] }, 1, 0]
+              $cond: [{ $eq: ['$interactionType', 'click'] }, 1, 0]
             }
           },
           shares: {
             $sum: {
-              $cond: [{ $eq: ['$interactionType', 'share'] }, 1, 0]
+              $cond: [{ $eq: ['$interactionType', 'rate'] }, 1, 0]
             }
           },
           avgDuration: {
