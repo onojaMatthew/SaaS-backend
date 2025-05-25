@@ -68,12 +68,11 @@ export class AuthService {
   static async login(email: string, password: string) {
     const secret = key.SECRET;
     const expiresIn = key.EXPIRES_IN;
-
     if (!secret) throw new Error("JWT_SECRET is not defined");
     if (!expiresIn) throw new Error("JWT_EXPIRES_IN is not defined");
     
     // Not in cache, check database
-    const user = await User.findOne({ email }).select('-password');
+    const user = await User.findOne({ email }).select('password');
     if (!user || !(await user.comparePassword(password))) {
       throw new Error('Invalid credentials');
     }

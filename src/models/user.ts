@@ -101,7 +101,6 @@ UserSchema.methods.generateAuthToken = function (): string {
     role: this.role
   };
 
-  console.log(payload)
   return jwt.sign(
     payload,
     secret,
