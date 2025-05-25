@@ -88,8 +88,9 @@ export class ContentController {
   // Get all content with caching
   public static async getAllContent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      
       const cacheKey = 'contents:all';
-      const { businessId } = req.query;
+      const { businessId } = req.user;
 
       // Different cache key if filtered by business
       const finalCacheKey = businessId 

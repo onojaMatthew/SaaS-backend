@@ -25,20 +25,22 @@ export const register = async (req: Request, res: Response, next: NextFunction):
     res.status(201).json({ success: true, data: { user, business, token }, message: 'Registration successful' });
   } catch (error: any) {
     Logger.error(error.message)
-    next(new AppError("Failed to register", 500));
+    return next(new AppError(error.message, 500));
   }
 }
 
 export const registerReader = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { email, password, role } = req.body;
-
+    const itExists = await Reader.findOne({ email });
+    if (itExists) {
+      return next(new AppError("Email already taken", 404));
+    }
     const { user, token } = await AuthService.registerReader(
       email,
       password,
       role
     );
-    console.log("after auth class operation")
     res.status(201).json({ success: true, data: { user, token }, message: 'Registration successful' });
   } catch (error: any) {
     Logger.error(error.message)
@@ -55,7 +57,7 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   } catch (error: any) {
     console.log(error)
     Logger.error(error.message)
-    return next(new AppError("Failed to log in", 500));
+    return next(new AppError(error.message, 500));
     
   }
 }
@@ -68,7 +70,7 @@ export const signin = async (req: Request, res: Response, next: NextFunction): P
     res.json({ success: true, data: { user, token }, message: 'Login successful' });
   } catch (error: any) {
     Logger.error(error.message)
-    return next(new AppError("Failed to log in", 500));
+    return next(new AppError(error.message, 500));
     
   }
 }

@@ -40,7 +40,7 @@ paths:
 
 
 
-  /auth/business/register:
+  /api/v1/auth/business/register:
     post:
       tags:
         - AUTH
@@ -72,6 +72,10 @@ paths:
                 type: string
                 default: password@123
                 required: true
+              role:
+                type: string
+                default: content_manager
+                required: true
       responses:
         200:
           description: Success
@@ -87,158 +91,162 @@ paths:
                 type: object
                 properties:
                   name:
-                  type: string
-                  default: Olarewaju Ayodele
-                businessName:
-                  type: string
-                  default: ola enterprise
-                email:
-                  type: string
-                  default: ola@gmail.com
-                  required: true
-                role:
-                  type: string
-                  default: content_manager
-                businessName:
-                  type: string
-                  default: ola enterprise
-                businessId:
-                  type: string
-                  default: 6824a9af4b8e81f4af4c12aa
-  # /auth/business/login:
-
-  # /auth/me:
-  # /auth/user/register:
-  # /auth/user/login:
-
-
-  /api/v1/auth/register:
-    get:
-      tags:
-        - AUTH
-      summary: BUSINESS REGISTRATION API
-      description: CREATE BUSINESS ACCOUNT
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          type: object
-          name: requestBody
-        
-      responses:
-        200:
-          description: Success
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              message: 
-                type: string
-                default: Request processed
-              data:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                      default: 1
-                    name:
-                      type: string
-                      default: admin
-                    createdBy:
-                      type: object
-                      properties:
-                        firstName:
-                          type: string
-                          default: John
-                        lastName:
-                          type: string
-                          default: Doe
-                        fullName:
-                          type: string
-                          default: John Doe
-                        id:
-                          type: number
-                          default: 1
-                    deleted:
-                      type: boolean
-                      default: false
-                    createdAt:
-                      type: date
-                      default: 2025-03-18 18:18:50
-                    updatedAt:
-                      type: date
-                      default: 2025-03-18 18:18:50
-
-  /api/v1/roles/new:
-    post:
-      security:
-        - Bearer: []
-      tags:
-        - ROLES
-      summary: NEW ROLE
-      description: CREATES A NEW ROLE
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: requestBody
-          type: object
-          schema:
-            properties:
-              name:
-                type: string
-                default: admin
-                required: true
-      responses:
-        200:
-          description: Success
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              message: 
-                type: string
-                default: Role created
-              data:
-                type: object
-                properties:
-                  id:
-                    type: number
-                    default: 1
-                  name:
                     type: string
-                    default: admin
-                  createdBy:
-                    type: object
-                    properties:
-                      firstName:
-                        type: string
-                        default: John
-                      lastName:
-                        type: string
-                        default: Doe
-                      fullName:
-                        type: string
-                        default: John Doe
-                      id:
-                        type: number
-                        default: 1
-                  deleted:
-                    type: boolean
-                    default: false
+                    default: Olarewaju Ayodele
+                  businessName:
+                    type: string
+                    default: ola enterprise
+                  email:
+                    type: string
+                    default: ola@gmail.com
+                    required: true
+                  role:
+                    type: string
+                    default: content_manager
+                  businessName:
+                    type: string
+                    default: ola enterprise
+                  businessId:
+                    type: string
+                    default: 6824a9af4b8e81f4af4c12aa
+                  token:
+                    type: string
+                    default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MmYzYTczMjAzZDZiNTBmNmEyZWQ4ZSIsImJ1c2luZXNzSWQiOiI2ODJmM2E3MzIwM2Q2YjUwZjZhMmVkOGMiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NzkyNTYxOSwiZXhwIjoxNzUwNTE3NjE5fQ.Bv2jd-KQkB4eFPFxKx0k5RB1IItFWH56j1tNPsaneII
                   createdAt:
                     type: date
                     default: 2025-03-18 18:18:50
                   updatedAt:
                     type: date
+                    default: 2025-03-18 18:18:50  
+  
+  /api/v1/auth/business/login:
+    post:
+      tags:
+        - AUTH
+      summary: BUSINESS REGISTERATION
+      description: ENDPOINT FOR BUSINESS REGISTERATION
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: requestBody
+          type: object
+          schema:
+            properties:
+              email:
+                type: string
+                default: ola@gmail.com
+                required: true
+              password:
+                type: string
+                default: password@123
+                required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Registration successful
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    default: Olarewaju Ayodele
+                  businessName:
+                    type: string
+                    default: ola enterprise
+                  email:
+                    type: string
+                    default: ola@gmail.com
+                    required: true
+                  role:
+                    type: string
+                    default: content_manager
+                  businessName:
+                    type: string
+                    default: ola enterprise
+                  businessId:
+                    type: string
+                    default: 6824a9af4b8e81f4af4c12aa
+                  token:
+                    type: string
+                    default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MmYzYTczMjAzZDZiNTBmNmEyZWQ4ZSIsImJ1c2luZXNzSWQiOiI2ODJmM2E3MzIwM2Q2YjUwZjZhMmVkOGMiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NzkyNTYxOSwiZXhwIjoxNzUwNTE3NjE5fQ.Bv2jd-KQkB4eFPFxKx0k5RB1IItFWH56j1tNPsaneII
+                  createdAt:
+                    type: date
                     default: 2025-03-18 18:18:50
+                  updatedAt:
+                    type: date
+                    default: 2025-03-18 18:18:50  
+
+  /api/v1/auth/user/register:
+    post:
+      tags:
+        - AUTH
+      summary: BUSINESS REGISTERATION
+      description: ENDPOINT FOR BUSINESS REGISTERATION
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: requestBody
+          type: object
+          schema:
+            properties:
+              email:
+                type: string
+                default: ola@gmail.com
+                required: true
+              password:
+                type: string
+                default: password@123
+                required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Registration successful
+              data:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    default: ola@gmail.com
+                    required: true
+                  role:
+                    type: string
+                    default: content_manager
+                  businessName:
+                    type: string
+                    default: ola enterprise
+                  token:
+                    type: string
+                    default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MmYzYTczMjAzZDZiNTBmNmEyZWQ4ZSIsImJ1c2luZXNzSWQiOiI2ODJmM2E3MzIwM2Q2YjUwZjZhMmVkOGMiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NzkyNTYxOSwiZXhwIjoxNzUwNTE3NjE5fQ.Bv2jd-KQkB4eFPFxKx0k5RB1IItFWH56j1tNPsaneII
+                  id:
+                    type: string
+                    default: 67ca0f97c349084e38bbf0aa
+                  createdAt:
+                      type: date
+                      default: 2025-03-18 18:18:50
+                  updatedAt:
+                    type: date
+                    default: 2025-03-18 18:18:50
+
+
+
+  

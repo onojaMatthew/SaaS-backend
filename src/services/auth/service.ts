@@ -16,9 +16,9 @@ export class AuthService {
     role: UserRole = UserRole.USER
   ) {
     // Check if user exists
-    if (await User.findOne({ email })) {
-      throw new Error('Email already in use');
-    }
+    // if (await User.findOne({ email })) {
+    //   throw new Error('Email already in use');
+    // }
 
     // Create business first
     const business = await Business.create({
@@ -57,9 +57,9 @@ export class AuthService {
     role: UserRole = UserRole.USER
   ) {
     // Check if user exists
-    if (await Reader.findOne({ email })) {
-      throw new Error('Email already in use');
-    }
+    // if (await Reader.findOne({ email })) {
+    //   throw new Error('Email already in use');
+    // }
 
     // Create reader account
     const reader = await Reader.create({
