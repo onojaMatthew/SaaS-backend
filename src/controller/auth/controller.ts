@@ -43,7 +43,7 @@ export const registerReader = async (req: Request, res: Response, next: NextFunc
     );
     res.status(201).json({ success: true, data: { user, token }, message: 'Registration successful' });
   } catch (error: any) {
-    Logger.error(error.message)
+    console.log(error)
     next(new AppError("Failed to register", 500));
   }
 }
@@ -52,9 +52,9 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   try {
     const { email, password } = req.body;
     const { user, token, business }: any = await AuthService.login(email, password);
-    
     res.json({ success: true, data: {user, token, business}, message: 'Login successful' });
   } catch (error: any) {
+    console.log(error)
     Logger.error(error.message)
     return next(new AppError(error.message, 500));
     

@@ -72,7 +72,7 @@ export class AuthService {
     if (!expiresIn) throw new Error("JWT_EXPIRES_IN is not defined");
     
     // Not in cache, check database
-    const user = await User.findOne({ email }).select('password');
+    const user = await User.findOne({ email }).select('+password');
     if (!user || !(await user.comparePassword(password))) {
       throw new Error('Invalid credentials');
     }
@@ -81,6 +81,7 @@ export class AuthService {
     user.lastLogin = new Date();
     await user.save();
 
+    const business = await Business.findById(user?.businessId)
     // Cache user data
     await redis.set(
       `user:email:${email}`,
@@ -89,7 +90,7 @@ export class AuthService {
     );
 
     const token = user.generateAuthToken();
-    return { user, token };
+    return { user, business, token };
   }
 
   static async signin(email: string, password: string) {
