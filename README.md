@@ -254,6 +254,8 @@ JWT_EXPIRES_IN=30d
 
 4. Start the server
 
+Before you start the server, ensure that there is a redis server running and a mongodb data running
+
 `npm run dev`
 
 ## 🧪 Running Tests
