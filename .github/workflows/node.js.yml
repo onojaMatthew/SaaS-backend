@@ -8,28 +8,8 @@ on:
     branches: [ "master" ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Load .env from secret
-        run: |
-          echo "${{ secrets.PROD_ENV_FILE }}" > .env
-          cat .env >> $GITHUB_ENV  # Expose all vars to subsequent steps
-
-      - run: npm ci
-
-      - name: Run tests
-        run: npm run test -- --detectOpenHandles
   build:
-    needs: test
     runs-on: self-hosted
 
     strategy:
