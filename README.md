@@ -243,7 +243,7 @@ Rebuilds and retrains the model if previously disposed
 PORT=5000
 NODE_ENV=development
 MONGO_URI=mongodb://localhost:27017/content-recommendation
-REDIS_URL=rediss://default:AU0NAAIjcDE0MzU2ODA0N2RkMDg0ZWUxYmU0MjIxZmEzMjg5MDkzNHAxMA@lenient-weasel-19725.upstash.io:6379
+REDIS_URL=redis://localhost:6379 
 REDIS_PASSWORD=AU0NAAIjcDE0MzU2ODA0N2RkMDg0ZWUxYmU0MjIxZmEzMjg5MDkzNHAxMA
 REDIS_TTL_CONTENT=3600
 REDIS_TTL_RECOMMENDATIONS=1800

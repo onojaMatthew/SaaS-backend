@@ -103,9 +103,6 @@ paths:
                   role:
                     type: string
                     default: content_manager
-                  businessName:
-                    type: string
-                    default: ola enterprise
                   businessId:
                     type: string
                     default: 6824a9af4b8e81f4af4c12aa
@@ -170,9 +167,6 @@ paths:
                   role:
                     type: string
                     default: content_manager
-                  businessName:
-                    type: string
-                    default: ola enterprise
                   businessId:
                     type: string
                     default: 6824a9af4b8e81f4af4c12aa
@@ -224,6 +218,12 @@ paths:
               data:
                 type: object
                 properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default:
                   email:
                     type: string
                     default: ola@gmail.com
@@ -247,6 +247,79 @@ paths:
                     type: date
                     default: 2025-03-18 18:18:50
 
-
-
+  /api/v1/contents:
+    post:
+      tags:
+        - CONTENT
+      summary: CREATE
+      description: CREATES BOOK CONTENT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: requestBody
+          type: object
+          schema:
+            properties:
+              title:
+                type: string
+                default: Why do we use it?
+                required: true
+              textContent:
+                type: string
+                default: It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+              genre:
+                type: string
+                default: fiction
+                required: true
+              author:
+                type: string
+                default: Igoche Ogbanje
+                required: true
+              url:
+                type: string
+                default: https://picsum.photos/200/300
+      responses:
+        200:
+          description: Success
+          schema:
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: 
+              data:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    default: Why do we use it?
+                    required: true
+                  textContent:
+                    type: string
+                    default: It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                  genre:
+                    type: string
+                    default: fiction
+                    required: true
+                  author:
+                    type: string
+                    default: Igoche Ogbanje
+                    required: true
+                  url:
+                    type: string
+                    default: https://picsum.photos/200/300
+                  id:
+                    type: string
+                    default: 67ca0f97c349084e38bbf0aa
+                  createdAt:
+                      type: date
+                      default: 2025-03-18 18:18:50
+                  updatedAt:
+                    type: date
+                    default: 2025-03-18 18:18:50
   
