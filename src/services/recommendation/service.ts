@@ -8,7 +8,8 @@ import { ContentBasedFiltering } from '../ai/contentBased';
 
 export class RecommendationService {
   private cbModel: ContentBasedFiltering;
-  private static RECOMMENDATION_CACHE_TTL = 1800; // 30 minutes
+  private static RECOMMENDATION_CACHE_TTL = 1800; 
+  
 
   constructor() {
     this.cbModel = new ContentBasedFiltering();
