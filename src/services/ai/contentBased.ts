@@ -9,7 +9,7 @@ export class ContentBasedFiltering {
   private model: tf.LayersModel;
   private contentEmbeddings: Record<string, number[]> = {};
   private readonly embeddingSize = 20;
-  private readonly featureSize = 100;
+  private readonly featureSize = 100
   private isDisposed = false;
 
   constructor() {
