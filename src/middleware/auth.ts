@@ -24,7 +24,7 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
 
     user = await User.findById(decoded.id).select('-password');
     if (!user) user = await Reader.findById(decoded.id).select('-password');
-    
+    if (!user) return next(new AppError("Invalid token", 401));
     // Attach user and business to request
     req.user = user;
     req.businessId = decoded.businessId;

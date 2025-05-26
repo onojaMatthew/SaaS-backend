@@ -60,14 +60,14 @@ export class ContentBasedFiltering {
       return;
     }
       const features = this.generateFeatureVectors(contents);
-      
       await this.model.fit(features, features, {
         epochs: 50,
         batchSize: 32,
         validationSplit: 0.2,
         callbacks: {
           onEpochEnd: (epoch, logs) => {
-            Logger.info(`ContentBased Epoch ${epoch}: loss = ${logs?.loss?.toFixed(4)}`);
+            const lossValue = typeof logs?.loss === 'number' ? logs.loss.toFixed(4) : 'N/A';
+            Logger.info(`ContentBased Epoch ${epoch}: loss = ${lossValue}`);
           }
         }
       });
@@ -90,8 +90,8 @@ export class ContentBasedFiltering {
         Math.min(content?.ratings?.length! / 1000, 1),
         
         // One-hot encoded type
-        ...['text', 'image', 'video', 'link'].map(t => 
-          content.type === t ? 1 : 0
+        ...['fiction', 'fantasy', 'mystery', 'science fiction', 'horror', 'thriller/suspense', 'historical fiction', 'romance', 'adventure',].map(t => 
+          content.category === t ? 1 : 0
         ),
         
         // Padding

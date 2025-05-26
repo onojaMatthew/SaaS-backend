@@ -80,6 +80,7 @@ export class ContentController {
         data: content,
       });
     } catch (error) {
+      console.log(error)
       Logger.error('Error fetching content:', error);
       return next(new AppError("Failed to fetch content", 500));
     }
@@ -121,6 +122,7 @@ export class ContentController {
         { EX: businessId ? CACHE_TTL : CONTENT_LIST_TTL }
       );
 
+      
       res.json({
         success: true,
         data: contents,
