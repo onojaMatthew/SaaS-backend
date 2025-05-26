@@ -48,7 +48,7 @@ export class ContentController {
   // Get content by ID with caching
   public static async getContentById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { id } = req.params;
+      const { id } = req.query;
       const cacheKey = `content:${id}`;
 
       // Try cache first
@@ -137,7 +137,7 @@ export class ContentController {
     try {
       const role = req.user.role;
       if (!role || role !== "content_manager") return next(new AppError("You do not have permission to perform this action", 401))
-      const { id } = req.params;
+      const { id } = req.query;
       const content = await Content.findByIdAndUpdate(id, req.body, { 
         new: true,
         lean: true 
@@ -174,7 +174,7 @@ export class ContentController {
     try {
       const role = req.user.role;
       if (!role || role !== "content_manager") return next(new AppError("You do not have permission to perform this action", 401))
-      const { id } = req.params;
+      const { id } = req.query;
       const content = await Content.findByIdAndDelete(id).lean();
 
       if (!content) {

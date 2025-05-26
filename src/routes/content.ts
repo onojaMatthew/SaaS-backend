@@ -9,10 +9,10 @@ const router = Router();
 router.post("/contents", authenticateUser, ContentController.createContent);
 router.get("/contents", authenticateUser, ContentController.getAllContent);
 router.get("/contents/stats", authenticateUser, ContentController.getContentStats);
-router.get("/contents/:id", authenticateUser, ContentController.getContentById);
-router.post("/contents/:id/rate", authenticateUser, ContentController.rateContent);
-router.put("/contents/:id/update", authenticateUser, ContentController.updateContent);
-router.delete("/contents/:id/delete", authenticateUser, ContentController.deleteContent);
+router.get("/contents", authenticateUser, ContentController.getContentById);
+router.post("/contents/rate", authenticateUser, ContentController.rateContent);
+router.put("/contents/update", authenticateUser, ContentController.updateContent);
+router.delete("/contents/delete", authenticateUser, ContentController.deleteContent);
 
 
 export { router as ContentRoutes }
