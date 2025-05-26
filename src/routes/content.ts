@@ -6,7 +6,7 @@ import { userInputSchema } from "../validation/business.validator";
 
 const router = Router();
 
-router.post("/contents", authenticateUser, validate(userInputSchema) as any, ContentController.createContent);
+router.post("/contents", authenticateUser, ContentController.createContent);
 router.get("/contents", authenticateUser, ContentController.getAllContent);
 router.get("/contents/stats", authenticateUser, ContentController.getContentStats);
 router.get("/contents/:id", authenticateUser, ContentController.getContentById);
