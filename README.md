@@ -263,6 +263,11 @@ Before you start the server, ensure that there is a redis server running and a m
 
 `npm run test`
 
+## Viewing API documentation
+
+visit http://localhost:5000/api_docs
+
+
 To build the docker container follow the commands below:
 
 From the root directory run:

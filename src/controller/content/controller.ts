@@ -244,7 +244,7 @@ export class ContentController {
   }
 
   public static async rateContent(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const contentId  = req.params.id;
+    const contentId  = req.query.contentId;
     const { id } = req.user;
     const { rating } = req.body
     if (!rating || typeof rating !== 'number' || rating < 1 || rating > 5) {

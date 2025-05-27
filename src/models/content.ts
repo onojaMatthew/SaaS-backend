@@ -8,7 +8,7 @@ const ContentSchema: Schema = new Schema({
   author: { type: String, trim: true },
   textContent: { type: String, required: true },
   ratings: [{ type: Number }],
-  averageRating: { type: Number },
+  averageRating: { type: Number, default: 0 },
   type: {
     type: String,
     enum: ['text', 'image', 'link', 'video']
