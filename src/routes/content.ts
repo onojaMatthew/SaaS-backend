@@ -9,7 +9,7 @@ const router = Router();
 router.post("/contents", authenticateUser, ContentController.createContent);
 router.get("/contents", authenticateUser, ContentController.getAllContent);
 router.get("/contents/stats", authenticateUser, ContentController.getContentStats);
-router.get("/contents", authenticateUser, ContentController.getContentById);
+router.get("/contents/details", authenticateUser, ContentController.getContentById);
 router.post("/contents/rate", authenticateUser, ContentController.rateContent);
 router.put("/contents/update", authenticateUser, ContentController.updateContent);
 router.delete("/contents/delete", authenticateUser, ContentController.deleteContent);

@@ -53,6 +53,7 @@ export class ContentController {
 
       // Try cache first
       const cachedContent = await redis.get(cacheKey);
+      console.log(cachedContent);
       if (cachedContent) {
         Logger.debug(`Cache hit for content ${id}`);
         res.json({
@@ -66,7 +67,7 @@ export class ContentController {
       // Cache miss - fetch from database
       Logger.debug(`Cache miss for content ${id}`);
       const content = await Content.findById(id).lean();
-
+      
       if (!content) {
         return next(new AppError("Content not found", 404));
       }
